@@ -47,30 +47,32 @@ export default class ProductForm extends Component {
       this.setState({ product });
     } else { //else case is category
       product.categoryId = value;
+      product.categoy = name;
       this.setState({ product })
     }
   }
 
   onSave(ev){
     ev.preventDefault();
-    const { name, price, inStock, categoryId } = this.state.product;
-    this.props.onProductCreate(name, price, inStock, categoryId)
-    this.setState({ product: {
-        name: '',
-        price: 0,
-        inStock: false,
-        categoryId: null
-    }})
+    this.props.onSaveHandler(this.state.product)
+    if (!this.props.product) {
+      this.setState({ product: {
+          name: '',
+          price: 0,
+          inStock: false,
+          categoryId: null
+      }})
+    }
   }
 
   onDelete(ev){
-
+    ev.preventDefault();
+    this.props.onDeleteHandler(this.props.product)
   }
 
 	render(){
-    console.log(this.props.product)
     const { allCategories, product } = this.state
-    const { name, price, inStock, categoryId, category} = product;
+    const { name, price, inStock, categoryId } = product;
     const { onSave, handleChange, onDelete } = this;
 		return (
             <form onSubmit={ onSave }>
@@ -86,12 +88,12 @@ export default class ProductForm extends Component {
               </div>
               <div className="form-group">
                 <label>Category</label>
-                <select className="form-control" name="categoryId" onChange={ handleChange } value={ categoryId ? category.name : ''}>
+                <select className="form-control" name="categoryId" onChange={ handleChange } value={ categoryId ? categoryId : ''}>
                   <option>-- none --</option>
                   {
                     allCategories.map( cat => {
                       return (
-                         <option key={ cat.id } value={ cat.name }>{ cat.name }</option>
+                         <option key={ cat.id } value={ cat.id }>{ cat.name }</option>
                       )
                     })
                   }

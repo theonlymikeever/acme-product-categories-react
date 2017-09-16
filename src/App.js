@@ -11,19 +11,51 @@ class App extends Component {
       products: [],
       categories: []
 		}
-    this.onProductCreate = this.onProductCreate.bind(this);
+    this.onSaveHandler = this.onSaveHandler.bind(this);
+    this.onDeleteHandler = this.onDeleteHandler.bind(this);
 	}
 
-  onProductCreate(name, price, inStock, categoryId){
-    axios.post('/api/products', {
-      name, price, inStock, categoryId
-    })
+  onSaveHandler(product){
+    //new product creation
+    if (!product.id){
+      axios.post('/api/products', product)
+      .then(() => {
+        const fetchProducts = axios.get('/api/products')
+        const fetchCategories = axios.get('/api/categories')
+        return Promise.all([ fetchProducts, fetchCategories ])
+      })
+      .then( ([_products, _categories]) => {
+        this.setState({
+          products: _products.data,
+          categories: _categories.data,
+        })
+      })
+    }
+    else {
+      axios.put(`/api/products/${product.id}`, product)
+      .then(() => {
+        const fetchProducts = axios.get('/api/products')
+        const fetchCategories = axios.get('/api/categories')
+        return Promise.all([ fetchProducts, fetchCategories ])
+      })
+      .then( ([_products, _categories]) => {
+        this.setState({
+          products: _products.data,
+          categories: _categories.data,
+        })
+      })
+    }
+  }
+
+  onDeleteHandler(product){
+    axios.delete(`/api/products/${product.id}`)
     .then(() => {
       const fetchProducts = axios.get('/api/products')
       const fetchCategories = axios.get('/api/categories')
       return Promise.all([ fetchProducts, fetchCategories ])
     })
     .then( ([_products, _categories]) => {
+      console.log('...')
       this.setState({
         products: _products.data,
         categories: _categories.data,
@@ -44,21 +76,23 @@ class App extends Component {
   }
 
 	render(){
+    //data to pass for rendering
     const { products, categories } = this.state;
-    const { onProductCreate } = this;
+    //handler methods to pass
+    const { onSaveHandler, onDeleteHandler } = this;
 		return (
 			<div id="main">
 				<h1>Acme Products Categories <br /><em>the React Version!</em></h1>
 				<div className="container">
           <div className="row">
-  					<ProductList products={ products } categories={ categories } />
+  					<ProductList products={ products } categories={ categories } onSaveHandler={ onSaveHandler } onDeleteHandler={ onDeleteHandler }/>
             <div className="col-sm-3">
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Add a Product
                 </div>
                 <div className="panel-body">
-                <ProductForm categories={ categories } onProductCreate={ onProductCreate } />
+                <ProductForm categories={ categories } onSaveHandler={ onSaveHandler } />
                 </div>
                 </div>
               </div>
