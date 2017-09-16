@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "postinstall": "webpack",
+    "start": "node server.js",
     "start:dev": "webpack -w & DATABASE_URL=postgres://localhost/my_db nodemon server.js --ignore browser/ --ignore dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
