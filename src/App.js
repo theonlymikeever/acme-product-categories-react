@@ -55,7 +55,6 @@ class App extends Component {
       return Promise.all([ fetchProducts, fetchCategories ])
     })
     .then( ([_products, _categories]) => {
-      console.log('...')
       this.setState({
         products: _products.data,
         categories: _categories.data,
@@ -85,7 +84,7 @@ class App extends Component {
 				<h1>Acme Products Categories <br /><em>the React Version!</em></h1>
 				<div className="container">
           <div className="row">
-  					<ProductList products={ products } categories={ categories } onSaveHandler={ onSaveHandler } onDeleteHandler={ onDeleteHandler }/>
+            <ProductList products={ products } categories={ categories } onSaveHandler={ onSaveHandler } onDeleteHandler={ onDeleteHandler } />
             <div className="col-sm-3">
               <div className="panel panel-default">
                 <div className="panel-heading">
