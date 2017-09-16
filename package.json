@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "webpack": "./node_modules/webpack/bin/webpack.js",
-    "start:dev": "npm run webpack -- -w & nodemon --ignore src/ --ignore dist/ server.js"
+    "start:dev": "npm run webpack -- -w & DATABASE_URL=postgres://localhost/my_db nodemon --ignore src/ --ignore dist/ server.js"
   },
   "author": "",
   "license": "ISC",
