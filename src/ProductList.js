@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 import Productform from './Productform';
 
 export default class ProductList extends Component {
