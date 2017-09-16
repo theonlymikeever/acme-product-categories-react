@@ -8,23 +8,21 @@ class ProductList extends Component {
 			products: [],
 			categories: []
 		}
+    this.onSave = this.onSave.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 	}
 
-	componentDidMount(){
-		const fetchProducts = axios.get('/api/products')
-		const fetchCatefories = axios.get('/api/categories')
+  handleChange(ev){
+    console.log(ev.target.value)
+  }
 
-		Promise.all([ fetchProducts, fetchCatefories ])
-		.then( ([_products, _categories]) => {
-			this.setState({
-				products: _products.data,
-				categories: _categories.data,
-			})
-		})
-	}
+  onSave(ev){
+    console.log(ev.target)
+  }
 
 	render(){
-		const { products, categories} = this.state;
+		const { products, categories} = this.props;
+    const { onSave, handleChange } = this;
 
 		return (
 			<div className="col-sm-6">
@@ -34,10 +32,10 @@ class ProductList extends Component {
 								<div className="col-sm-4" key={ product.id }>
 									<div className="panel panel-default">
 										<div className="panel-body">
-											<form>
+											<form onSubmit={ onSave }>
 												<div className="form-group">
 													<label>Name</label>
-													<input className="form-control" name="name" value={ product.name } />
+													<input className="form-control" name="name" value={ product.name } onChange={ handleChange }/>
 												</div>
 												<div className="form-group">
 													<label>Price</label>
@@ -50,7 +48,7 @@ class ProductList extends Component {
 														{
 															categories.map( category => {
 																return (
-																	<option value={ category.id }>{ category.name }</option>
+																	<option  key={ category.id } value={ category.id }>{ category.name }</option>
 																)
 															})
 														}
