@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
 
 export default class ProductForm extends Component {
 	constructor(){
@@ -20,15 +18,10 @@ export default class ProductForm extends Component {
     this.onDelete = this.onDelete.bind(this);
 	}
 
-  componentDidMount() {
-    axios.get('/api/categories')
-    .then( res => res.data )
-    .then( data => this.setState({ allCategories: data }));
-  }
-
   componentWillMount(){
     if (this.props.product) {
-    this.setState({ product: this.props.product })}
+     this.setState({ product: this.props.product })
+    }
   }
 
   handleChange(ev){
@@ -55,6 +48,7 @@ export default class ProductForm extends Component {
   onSave(ev){
     ev.preventDefault();
     this.props.onSaveHandler(this.state.product)
+    //reset form field
     if (!this.props.product) {
       this.setState({ product: {
           name: '',
@@ -71,8 +65,10 @@ export default class ProductForm extends Component {
   }
 
 	render(){
-    const { allCategories, product } = this.state
+    const allCategories = this.props.categories
+    const { product } = this.state
     const { name, price, inStock, categoryId } = product;
+    //handler methods
     const { onSave, handleChange, onDelete } = this;
 		return (
             <form onSubmit={ onSave }>

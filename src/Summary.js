@@ -11,7 +11,6 @@ export default function Summary (props) {
   let stockList = products.filter(prod => {
     return !prod.inStock
   });
-  console.log(stockList)
 
   return (
     <div className="col-sm-3">

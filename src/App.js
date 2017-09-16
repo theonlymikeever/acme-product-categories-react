@@ -4,6 +4,12 @@ import ProductList from './ProductList'
 import Summary from './Summary'
 import axios from 'axios'
 
+function fetchData(){
+    const fetchProducts = axios.get('/api/products')
+    const fetchCategories = axios.get('/api/categories')
+    return Promise.all([ fetchProducts, fetchCategories ])
+  }
+
 class App extends Component {
 	constructor(){
 		super();
@@ -20,9 +26,7 @@ class App extends Component {
     if (!product.id){
       axios.post('/api/products', product)
       .then(() => {
-        const fetchProducts = axios.get('/api/products')
-        const fetchCategories = axios.get('/api/categories')
-        return Promise.all([ fetchProducts, fetchCategories ])
+        return fetchData()
       })
       .then( ([_products, _categories]) => {
         this.setState({
@@ -34,9 +38,7 @@ class App extends Component {
     else {
       axios.put(`/api/products/${product.id}`, product)
       .then(() => {
-        const fetchProducts = axios.get('/api/products')
-        const fetchCategories = axios.get('/api/categories')
-        return Promise.all([ fetchProducts, fetchCategories ])
+        return fetchData()
       })
       .then( ([_products, _categories]) => {
         this.setState({
@@ -50,9 +52,7 @@ class App extends Component {
   onDeleteHandler(product){
     axios.delete(`/api/products/${product.id}`)
     .then(() => {
-      const fetchProducts = axios.get('/api/products')
-      const fetchCategories = axios.get('/api/categories')
-      return Promise.all([ fetchProducts, fetchCategories ])
+      return fetchData()
     })
     .then( ([_products, _categories]) => {
       this.setState({
@@ -63,9 +63,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    const fetchProducts = axios.get('/api/products')
-    const fetchCategories = axios.get('/api/categories')
-    Promise.all([ fetchProducts, fetchCategories ])
+    fetchData()
     .then( ([_products, _categories]) => {
       this.setState({
         products: _products.data,
@@ -81,8 +79,8 @@ class App extends Component {
     const { onSaveHandler, onDeleteHandler } = this;
 		return (
 			<div id="main">
-				<h1>Acme Products Categories <br /><em>the React Version!</em></h1>
-				<div className="container">
+        <div className="container">
+				<h1>Acme Products Categories <small>the React Version!</small></h1>
           <div className="row">
             <ProductList products={ products } categories={ categories } onSaveHandler={ onSaveHandler } onDeleteHandler={ onDeleteHandler } />
             <div className="col-sm-3">
