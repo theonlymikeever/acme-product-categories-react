@@ -9,8 +9,9 @@ export default function Summary (props) {
   }, products[0]) || ''; //set to empty string for async
 
   let stockList = products.filter(prod => {
-    return prod.inStock
+    return !prod.inStock
   });
+  console.log(stockList)
 
   return (
     <div className="col-sm-3">
