@@ -102,7 +102,7 @@ export default class ProductForm extends Component {
               <div className="form-group">
                 <button className="btn btn-primary btn-block">Save</button>
                 { /* load delete button on products */
-                  product.id ? <button onClick={ onDelete } className="btn btn-danger">Delete</button> : null
+                  product.id ? <button onClick={ onDelete } className="btn btn-danger btn-block">Delete</button> : null
                 }
               </div>
             </form>
