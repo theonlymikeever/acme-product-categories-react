@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
-class ProductList extends Component {
+export default class ProductList extends Component {
 	constructor(){
 		super();
 		this.state = {
@@ -54,6 +54,10 @@ class ProductList extends Component {
 														}
 													</select>
 												</div>
+                        <div className="form-group">
+                          <button className="btn btn-primary btn-block">Save</button>
+                          <button className="btn btn-danger btn-block">Delete</button>
+                        </div>
 											</form>
 										</div>
 									</div>
@@ -65,6 +69,3 @@ class ProductList extends Component {
 		)
 	}
 }
-
-
-export default ProductList;

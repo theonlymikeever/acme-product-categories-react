@@ -47,7 +47,7 @@ export default class ProductForm extends Component {
     const { allCategories, name, price, inStock } = this.state;
     const { onCreate, handleChange } = this;
 		return (
-			<div className="col-sm-4">
+			<div className="col-sm-3">
         <div className="panel panel-default">
           <div className="panel-heading">
             Add a Product
