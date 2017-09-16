@@ -7,13 +7,17 @@ export default class ProductForm extends Component {
 		super();
 		this.state = {
       allCategories: [],
-      name: '',
-      price: 0,
-      inStock: false,
-      categoryId: null
+      product: {
+        name: '',
+        price: 0,
+        inStock: false,
+        categoryId: null,
+        category: null
+      }
 		}
-    this.handleChange = this.handleChange.bind(this)
-    this.onCreate = this.onCreate.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.onDelete = this.onDelete.bind(this);
 	}
 
   componentDidMount() {
@@ -22,34 +26,56 @@ export default class ProductForm extends Component {
     .then( data => this.setState({ allCategories: data }));
   }
 
+  componentWillMount(){
+    if (this.props.product) {
+    this.setState({ product: this.props.product })}
+  }
+
   handleChange(ev){
     //check to see which input is changing
-    if (ev.target.name === 'name'){
-      this.setState({name: ev.target.value});
-    } else if (ev.target.name === 'price'){
-      this.setState({price: ev.target.value});
+    const { name, value, checked } = ev.target;
+    const { product } = this.state;
+    if (name === 'name'){
+      product.name = value;
+      this.setState({ product });
+    } else if (name === 'price'){
+      product.price = value;
+      this.setState({ product });
     }
-    else if (ev.target.name === 'inStock') {
-      this.setState({ inStock: ev.target.checked });
+    else if (name === 'inStock') {
+      product.inStock = checked;
+      this.setState({ product });
     } else { //else case is category
-      this.setState({ categoryId: ev.target.value })
+      product.categoryId = value;
+      this.setState({ product })
     }
   }
 
-  onCreate(ev){
+  onSave(ev){
     ev.preventDefault();
-    const { name, price, inStock, categoryId } = this.state;
+    const { name, price, inStock, categoryId } = this.state.product;
     this.props.onProductCreate(name, price, inStock, categoryId)
-    //clear form needed
+    this.setState({ product: {
+        name: '',
+        price: 0,
+        inStock: false,
+        categoryId: null
+    }})
+  }
+
+  onDelete(ev){
+
   }
 
 	render(){
-    const { allCategories, name, price, inStock } = this.state;
-    const { onCreate, handleChange } = this;
+    console.log(this.props.product)
+    const { allCategories, product } = this.state
+    const { name, price, inStock, categoryId, category} = product;
+    const { onSave, handleChange, onDelete } = this;
 		return (
-            <form onSubmit={ onCreate }>
+            <form onSubmit={ onSave }>
               <div className="form-group">
-                <label>Name</label><input className="form-control" name="name" value={ name }onChange={ handleChange } />
+                <label>Name</label><input className="form-control" name="name" value={ name } onChange={ handleChange } />
               </div>
               <div className="form-group">
                 <label>Price</label><input className="form-control" name="price" type="number" value={ price } onChange={ handleChange } />
@@ -60,12 +86,12 @@ export default class ProductForm extends Component {
               </div>
               <div className="form-group">
                 <label>Category</label>
-                <select className="form-control" name="categoryId" onChange={ handleChange }>
+                <select className="form-control" name="categoryId" onChange={ handleChange } value={ categoryId ? category.name : ''}>
                   <option>-- none --</option>
                   {
                     allCategories.map( cat => {
                       return (
-                         <option key={ cat.id } value={ cat.id }>{ cat.name }</option>
+                         <option key={ cat.id } value={ cat.name }>{ cat.name }</option>
                       )
                     })
                   }
@@ -73,6 +99,9 @@ export default class ProductForm extends Component {
               </div>
               <div className="form-group">
                 <button className="btn btn-primary btn-block">Save</button>
+                { /* load delete button on products */
+                  product.id ? <button onClick={ onDelete } className='btn btn-danger'>Delete</button> : null
+                }
               </div>
             </form>
 		)
