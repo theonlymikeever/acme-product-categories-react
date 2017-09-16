@@ -47,12 +47,6 @@ export default class ProductForm extends Component {
     const { allCategories, name, price, inStock } = this.state;
     const { onCreate, handleChange } = this;
 		return (
-			<div className="col-sm-3">
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            Add a Product
-          </div>
-          <div className="panel-body">
             <form onSubmit={ onCreate }>
               <div className="form-group">
                 <label>Name</label><input className="form-control" name="name" value={ name }onChange={ handleChange } />
@@ -81,9 +75,6 @@ export default class ProductForm extends Component {
                 <button className="btn btn-primary btn-block">Save</button>
               </div>
             </form>
-          </div>
-        </div>
-			</div>
 		)
 	}
 

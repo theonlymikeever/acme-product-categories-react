@@ -52,7 +52,16 @@ class App extends Component {
 				<div className="container">
           <div className="row">
   					<ProductList products={ products } categories={ categories } />
-  					<ProductForm categories={ categories } onProductCreate={ onProductCreate } />
+            <div className="col-sm-3">
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  Add a Product
+                </div>
+                <div className="panel-body">
+                <ProductForm categories={ categories } onProductCreate={ onProductCreate } />
+                </div>
+                </div>
+              </div>
             <Summary products={ products } categories={ categories } />
           </div>
 				</div>
