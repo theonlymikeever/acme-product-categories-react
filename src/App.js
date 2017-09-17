@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import ProductForm from './ProductForm'
-import ProductList from './ProductList'
-import Summary from './Summary'
+import ProductForm from './ProductForm';
+import ProductList from './ProductList';
+import Summary from './Summary';
+import ErrorBox from './ErrorBox';
 import axios from 'axios'
 
 //fetch utill function
@@ -19,7 +20,8 @@ export default class App extends Component {
 		super();
 		this.state = {
       products: [],
-      categories: []
+      categories: [],
+      error: null
 		}
     this.onSaveHandler = this.onSaveHandler.bind(this);
     this.onDeleteHandler = this.onDeleteHandler.bind(this);
@@ -32,14 +34,16 @@ export default class App extends Component {
       .then(() => {
         return fetchData()
       })
-      .then( ([ products, categories ]) => this.setState({ products, categories }));
+      .then( ([ products, categories ]) => this.setState({ products, categories }))
+      .catch((err) => this.setState({ error: err.response.data.errors[0].message }))
     } // updating a product
     else {
       axios.put(`/api/products/${product.id}`, product)
       .then(() => {
         return fetchData()
       })
-      .then( ([ products, categories ]) => this.setState({ products, categories }));
+      .then( ([ products, categories ]) => this.setState({ products, categories }))
+      .catch((err) => this.setState({ error: err.response.data.errors[0].message }))
     }
   }
 
@@ -58,7 +62,7 @@ export default class App extends Component {
 
 	render(){
     //data to pass for rendering
-    const { products, categories } = this.state;
+    const { products, categories, error } = this.state;
     //handler methods to pass
     const { onSaveHandler, onDeleteHandler } = this;
 		return (
@@ -66,6 +70,9 @@ export default class App extends Component {
         <div className="container">
 				<h1>Acme Products Categories <small>the React Version!</small></h1>
           <div className="row">
+            {
+              error ? <ErrorBox error={ error } /> : null
+            }
             <ProductList products={ products } categories={ categories } onSaveHandler={ onSaveHandler } onDeleteHandler={ onDeleteHandler } />
             <div className="col-sm-3">
               <div className="panel panel-default">

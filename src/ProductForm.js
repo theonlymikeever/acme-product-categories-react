@@ -10,7 +10,8 @@ export default class ProductForm extends Component {
         inStock: false,
         categoryId: null,
         category: null
-      }
+      },
+      canSave: true
 		}
     this.handleChange = this.handleChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -19,7 +20,7 @@ export default class ProductForm extends Component {
 
   componentWillMount(){
     if (this.props.product) {
-     this.setState({ product: this.props.product })
+     this.setState({ product: this.props.product, canSave: false})
     }
   }
 
@@ -33,7 +34,8 @@ export default class ProductForm extends Component {
     const { product } = this.state;
     //set new values before setState
     product[name] = value
-    this.setState({product});
+    this.setState({product, canSave: true});
+    // if (this.props.product)
     // const { name, value, checked } = ev.target;
     // const { product } = this.state;
     // if (name === 'name'){
@@ -64,6 +66,8 @@ export default class ProductForm extends Component {
           inStock: false,
           categoryId: null
       }})
+    } else {
+      this.setState({canSave: false})
     }
   }
 
@@ -74,7 +78,7 @@ export default class ProductForm extends Component {
 
 	render(){
     const allCategories = this.props.categories
-    const { product } = this.state
+    const { product, canSave } = this.state
     const { name, price, inStock, categoryId } = product;
     //handler methods
     const { onSave, handleChange, onDelete } = this;
@@ -104,7 +108,7 @@ export default class ProductForm extends Component {
                 </select>
               </div>
               <div className="form-group">
-                <button className="btn btn-primary btn-block">Save</button>
+                <button className="btn btn-primary btn-block" disabled={ canSave ? '' : 'disabled' } >Save</button>
                 { /* load delete button on products */
                   product.id ? <button onClick={ onDelete } className="btn btn-danger btn-block">Delete</button> : null
                 }
