@@ -1,16 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ProductForm from './ProductForm';
 
-export default class ProductList extends Component {
-	constructor(){
-		super();
-		this.state = {
-			updatedProducts: []
-		}
-	}
-
-	render(){
-		const { products, categories, onSaveHandler, onDeleteHandler } = this.props;
+export default function ProductList(props) {
+		const { products, categories, onSaveHandler, onDeleteHandler } = props;
 		return (
 			<div className="col-sm-6 well">
 					{
@@ -28,5 +20,4 @@ export default class ProductList extends Component {
 					}
 			</div>
 		)
-	}
 }

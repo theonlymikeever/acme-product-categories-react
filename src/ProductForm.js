@@ -4,7 +4,6 @@ export default class ProductForm extends Component {
 	constructor(){
 		super();
 		this.state = {
-      allCategories: [],
       product: {
         name: '',
         price: 0,
@@ -26,23 +25,32 @@ export default class ProductForm extends Component {
 
   handleChange(ev){
     //check to see which input is changing
-    const { name, value, checked } = ev.target;
+    const target = ev.target;
+    const name = target.name;
+    //will pull boolean out of checkbox otherwise the value
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    //copy either current product or blank state before updating
     const { product } = this.state;
-    if (name === 'name'){
-      product.name = value;
-      this.setState({ product });
-    } else if (name === 'price'){
-      product.price = value;
-      this.setState({ product });
-    }
-    else if (name === 'inStock') {
-      product.inStock = checked;
-      this.setState({ product });
-    } else { //else case is category
-      product.categoryId = value;
-      product.categoy = name;
-      this.setState({ product })
-    }
+    //set new values before setState
+    product[name] = value
+    this.setState({product});
+    // const { name, value, checked } = ev.target;
+    // const { product } = this.state;
+    // if (name === 'name'){
+    //   product.name = value;
+    //   this.setState({ product });
+    // } else if (name === 'price'){
+    //   product.price = value;
+    //   this.setState({ product });
+    // }
+    // else if (name === 'inStock') {
+    //   product.inStock = checked;
+    //   this.setState({ product });
+    // } else { //else case is category
+    //   product.categoryId = value;
+    //   product.categoy = name;
+    //   this.setState({ product })
+    // }
   }
 
   onSave(ev){
@@ -102,7 +110,6 @@ export default class ProductForm extends Component {
                 }
               </div>
             </form>
-		)
+		          )
 	}
-
 }

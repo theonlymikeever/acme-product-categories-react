@@ -4,13 +4,17 @@ import ProductList from './ProductList'
 import Summary from './Summary'
 import axios from 'axios'
 
+//fetch utill function
 function fetchData(){
     const fetchProducts = axios.get('/api/products')
     const fetchCategories = axios.get('/api/categories')
     return Promise.all([ fetchProducts, fetchCategories ])
-  }
+      .then( ([products, categories]) => {
+        return [ products.data, categories.data ]
+      })
+}
 
-class App extends Component {
+export default class App extends Component {
 	constructor(){
 		super();
 		this.state = {
@@ -28,24 +32,14 @@ class App extends Component {
       .then(() => {
         return fetchData()
       })
-      .then( ([_products, _categories]) => {
-        this.setState({
-          products: _products.data,
-          categories: _categories.data,
-        })
-      })
-    }
+      .then( ([ products, categories ]) => this.setState({ products, categories }));
+    } // updating a product
     else {
       axios.put(`/api/products/${product.id}`, product)
       .then(() => {
         return fetchData()
       })
-      .then( ([_products, _categories]) => {
-        this.setState({
-          products: _products.data,
-          categories: _categories.data,
-        })
-      })
+      .then( ([ products, categories ]) => this.setState({ products, categories }));
     }
   }
 
@@ -54,22 +48,12 @@ class App extends Component {
     .then(() => {
       return fetchData()
     })
-    .then( ([_products, _categories]) => {
-      this.setState({
-        products: _products.data,
-        categories: _categories.data,
-      })
-    })
+    .then( ([ products, categories ]) => this.setState({ products, categories }));
   }
 
   componentDidMount(){
     fetchData()
-    .then( ([_products, _categories]) => {
-      this.setState({
-        products: _products.data,
-        categories: _categories.data,
-      })
-    })
+    .then( ([ products, categories ]) => this.setState({ products, categories }));
   }
 
 	render(){
@@ -100,5 +84,3 @@ class App extends Component {
 		)
 	}
 }
-
-export default App;

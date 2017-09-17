@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function Summary (props) {
+  //data passed from parent
   const { products, categories } = props;
   let productAmount = products.length;
 
